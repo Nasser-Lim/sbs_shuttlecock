@@ -154,7 +154,7 @@ if prompt := st.chat_input(placeholder="최근 삼성전자 실적을 알려줘.
         formatted_prompt = llm.invoke([HumanMessage(content=search_prompt)])
         search_keyword = format_response(formatted_prompt.content)
 
-        st.write("후처리 키워드: " + search_keyword)
+        # st.write("후처리 키워드: " + search_keyword)
         
         fetched_news_data = fetch_news_data(search_keyword, limit=30)
 
