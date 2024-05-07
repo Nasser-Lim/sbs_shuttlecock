@@ -5,6 +5,7 @@ langchain-anthropic
 langchain
 langchain-community
 langchain-openai
+faiss-cpu
 
 urllib3
 pydantic
