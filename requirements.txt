@@ -1,0 +1,10 @@
+streamlit
+requests
+anthropic
+langchain-anthropic
+langchain
+langchain-community
+langchain-openai
+
+urllib3
+pydantic
