@@ -144,8 +144,8 @@ if prompt := st.chat_input(placeholder="최근 삼성전자 실적을 알려줘.
         이 질문에 대한 답변을 찾기 위해 SBS 뉴스 기사를 검색하려고 합니다. 검색에 사용할 키워드를 다음 기준에 따라 추출해주세요:
 
         1. 질문의 핵심 주제와 관련된 키워드 1개 또는 2개를 선정합니다.
-        2. 선정한 키워드는 뉴스 기사 검색에 적합한 고유명사 또는 보통명사 형태로 변환합니다. 
-        3. 변환된 키워드는 공백으로 구분하여 출력합니다.
+        2. 선정된 키워드에서 고유명사만 선별합니다. 고유명사 키워드가 없으면 보통명사 1개를 선별합니다.
+        3. 선별한 키워드가 2개이면 공백으로 구분하여 출력합니다.
 
         출력 형식:
         (키워드1) (키워드2)
@@ -154,7 +154,7 @@ if prompt := st.chat_input(placeholder="최근 삼성전자 실적을 알려줘.
         formatted_prompt = llm.invoke([HumanMessage(content=search_prompt)])
         search_keyword = format_response(formatted_prompt.content)
 
-        # st.write("후처리 키워드: " + search_keyword)
+        st.write("후처리 키워드: " + search_keyword)
         
         fetched_news_data = fetch_news_data(search_keyword, limit=30)
 
