@@ -116,7 +116,16 @@ def retrieve_relevant_documents(query, vector_store, k=5):
     
     return relevant_docs
 
-st.title("🏸셔틀콕::새로운 지식검색")
+#########################################################################################
+
+# 모바일 디바이스 여부 확인
+is_mobile = "mobile" in st.query_params
+
+# 디바이스에 따라 다른 타이틀 출력
+if is_mobile:
+    st.title("🏸셔틀콕")
+else:
+    st.title("🏸셔틀콕 ― 새로운 AI 지식검색")
 
 # 사용자와 챗봇 간의 대화 메시지를 저장하기 위해 session state를 확인하고 초기화합니다.
 if "messages" not in st.session_state:
