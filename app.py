@@ -24,9 +24,9 @@ def clean_text(text):
 
 def fetch_news_data(query, limit):
     # 쿼리 인코딩
-    encoded_query = urllib.parse.quote(query)
+    # encoded_query = urllib.parse.quote(query)
     # API URL 구성
-    url = f"https://searchapi.news.sbs.co.kr/search/news?query={encoded_query}&collection=news_sbs&offset=0&limit={limit}"
+    url = f"https://searchapi.news.sbs.co.kr/search/news?query={query}&collection=news_sbs&offset=0&limit={limit}"
 
     # API 요청
     response = requests.get(url)
