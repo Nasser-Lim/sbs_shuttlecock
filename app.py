@@ -165,7 +165,7 @@ if prompt := st.chat_input(placeholder="최근 삼성전자 실적을 알려줘.
 
         # st.write("후처리 키워드: " + search_keyword)
         
-        fetched_news_data = fetch_news_data(search_keyword, limit=30)
+        fetched_news_data = fetch_news_data(search_keyword, limit=40)
 
         # fetched_news_data를 직접 문서 객체로 변환
         docs = [Document(page_content=article['article'], metadata={'title': article['title'], 'date': article['date'], 'source': article['link']}) for article in fetched_news_data]
