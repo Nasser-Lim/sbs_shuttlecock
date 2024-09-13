@@ -130,7 +130,7 @@ else:
 # 사용자와 챗봇 간의 대화 메시지를 저장하기 위해 session state를 확인하고 초기화합니다.
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
-        {"role": "assistant", "content": "안녕하세요? '셔틀콕'은 믿을 수 있는 SBS 뉴스를 바탕으로 사용자 질문 맥락을 콕~ 짚어 이해하고 답변하는 AI 챗봇입니다. 보도국 구성원들의 뉴스 검색 시간을 효율적으로 줄이고자 개발됐으며, AI가 생성한 문장마다 출처를 표시해 신뢰도를 높였습니다.\n\n제가 무엇을 도와드릴까요?"}
+        {"role": "assistant", "content": "안녕하세요? '셔틀콕'은 믿을 수 있는 SBS 뉴스를 바탕으로 사용자 질문 맥락을 콕~ 짚어 이해하고 답변하는 AI 챗봇입니다. 생성한 문장마다 출처를 표시해 신뢰도를 높였습니다.\n\n제가 무엇을 도와드릴까요?"}
     ]
 
 # session state에 저장된 모든 메시지를 반복하여 화면에 표시합니다.
@@ -146,19 +146,16 @@ if prompt := st.chat_input(placeholder="최근 삼성전자 실적을 알려줘.
         anthropic_api_key = st.secrets["CLAUDE_API_KEY"]
         llm = ChatAnthropicModel(model="claude-3-haiku-20240307", temperature=0.0, max_tokens=64, anthropic_api_key=anthropic_api_key)
 
-        search_prompt = f"""
-        사용자가 다음과 같은 질문을 했습니다:
-        {prompt}
-
-        이 질문에 대한 답변을 찾기 위해 SBS 뉴스 기사를 검색하려고 합니다. 검색에 사용할 키워드를 다음 기준에 따라 추출해주세요:
-
-        1. 질문의 핵심 주제와 관련된 키워드 1개 또는 2개를 선정합니다.
-        2. 선정된 키워드에서 고유명사만 선별합니다. 고유명사 키워드가 없으면 보통명사 1개를 선별합니다.
-        3. 선별한 키워드가 2개이면 공백으로 구분하여 출력합니다.
-
-        출력 형식:
-        (키워드1) (키워드2)
-        """.strip()
+				search_prompt = f"""
+				사용자 질문: {prompt}
+				
+				위 질문에 대한 SBS 뉴스 검색 키워드를 추출하세요:
+				1. 질문의 핵심 주제와 관련된 1-2개의 키워드 선정
+				2. 가능한 고유명사 위주로 선별, 없으면 중요 일반명사 선택
+				3. 키워드 2개면 공백으로 구분
+				
+				출력 형식: 키워드1 키워드2
+				"""
 
         formatted_prompt = llm.invoke([HumanMessage(content=search_prompt)])
         search_keyword = format_response(formatted_prompt.content)
@@ -198,22 +195,22 @@ if prompt := st.chat_input(placeholder="최근 삼성전자 실적을 알려줘.
         with st.chat_message("assistant"):
                 
             # 최종 답변 생성
-            answer_prompt = f"""
-            다음은 사용자의 질문입니다: {prompt}
-
-            그리고 다음은 관련 문서들의 내용입니다:
-            {combined_docs}
-
-            이 정보를 바탕으로 사용자의 질문에 대한 최종 답변을 두괄식으로 상세하게 생성하세요.
-            답변에 필요한 정보가 없으면 모른다고 답하세요.
-
-            답변에 포함된 '오늘', '어제' 등의 날짜 표현은 다음과 같이 처리하세요:
-            1. 관련 문서의 내용에 절대적인 날짜(예: 15일, 23일)가 괄호 안에 명시되어 있다면, 해당 날짜로 바꾸세요.
-            2. 기사 작성날짜를 참고하여 사건이 발생한 날짜를 유추하고, 그에 맞게 날짜 표현을 사용하세요.
-
-            생성된 문장 끝마다 해당 문장의 정보 출처를 [1], [2]와 같이 대괄호 안에 숫자로 개별적으로 표시하세요. 
-            여러 출처가 있을 경우, 각 출처를 구분하여 [3] [4]와 같이 표시하세요.
-            """
+						answer_prompt = f"""
+						사용자 질문: {prompt}
+						
+						관련 뉴스 정보:
+						{combined_docs}
+						
+						지시사항:
+						1. 위 정보를 바탕으로 사용자 질문에 대한 답변을 구체적으로 작성하세요.
+						2. 답변은 핵심 내용을 먼저 제시하는 두괄식으로 작성하세요.
+						3. 정보가 부족하면 "관련 정보가 충분하지 않습니다"라고 답하세요.
+						4. '오늘', '어제' 등의 상대적 날짜는 구체적인 날짜로 변환하세요.
+						5. 각 문장 끝에 출처를 [1], [2] 형식으로 표시하세요. 여러 출처는 [3][4] 형식으로 표시하세요.
+						6. 답변은 간결하고 명확하게, 3-4문장 이내로 작성하세요.
+						
+						답변:
+						"""
 
             client = anthropic.Anthropic(api_key=anthropic_api_key)
 
