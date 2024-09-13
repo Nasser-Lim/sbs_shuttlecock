@@ -160,7 +160,7 @@ if prompt := st.chat_input(placeholder="최근 삼성전자 실적을 알려줘.
         formatted_prompt = llm.invoke([HumanMessage(content=search_prompt)])
         search_keyword = format_response(formatted_prompt.content)
 
-        st.write("후처리 키워드: " + search_keyword)
+        # st.write("후처리 키워드: " + search_keyword)
         
         fetched_news_data = fetch_news_data(search_keyword, limit=40)
 
@@ -175,7 +175,7 @@ if prompt := st.chat_input(placeholder="최근 삼성전자 실적을 알려줘.
         vector_store = create_vector_store(split_docs)
         
         if vector_store is None:
-            empty_answer = "관련 질문으로 검색된 sbs 뉴스가 없습니다."
+            empty_answer = "질문하신 내용으로 검색된 sbs 뉴스가 없습니다."
             st.session_state.messages.append({"role": "assistant", "content": empty_answer})
             st.write(empty_answer)
             skip_answer = True
@@ -207,7 +207,6 @@ if prompt := st.chat_input(placeholder="최근 삼성전자 실적을 알려줘.
             3. 정보가 부족하면 "관련 정보가 충분하지 않습니다"라고 답하세요.
             4. '오늘', '어제' 등의 상대적 날짜는 구체적인 날짜로 변환하세요.
             5. 각 문장 끝에 출처를 [1], [2] 형식으로 표시하세요. 여러 출처는 [3][4] 형식으로 표시하세요.
-            6. 답변은 간결하고 명확하게, 3-4문장 이내로 작성하세요.
 
             답변:
             """
