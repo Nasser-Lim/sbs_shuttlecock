@@ -146,16 +146,16 @@ if prompt := st.chat_input(placeholder="최근 삼성전자 실적을 알려줘.
         anthropic_api_key = st.secrets["CLAUDE_API_KEY"]
         llm = ChatAnthropicModel(model="claude-3-haiku-20240307", temperature=0.0, max_tokens=64, anthropic_api_key=anthropic_api_key)
 
-				search_prompt = f"""
-				사용자 질문: {prompt}
-				
-				위 질문에 대한 SBS 뉴스 검색 키워드를 추출하세요:
-				1. 질문의 핵심 주제와 관련된 1-2개의 키워드 선정
-				2. 가능한 고유명사 위주로 선별, 없으면 중요 일반명사 선택
-				3. 키워드 2개면 공백으로 구분
-				
-				출력 형식: 키워드1 키워드2
-				"""
+	search_prompt = f"""
+	사용자 질문: {prompt}
+	
+	위 질문에 대한 SBS 뉴스 검색 키워드를 추출하세요:
+	1. 질문의 핵심 주제와 관련된 1-2개의 키워드 선정
+	2. 가능한 고유명사 위주로 선별, 없으면 중요 일반명사 선택
+	3. 키워드 2개면 공백으로 구분
+	
+	출력 형식: 키워드1 키워드2
+	"""
 
         formatted_prompt = llm.invoke([HumanMessage(content=search_prompt)])
         search_keyword = format_response(formatted_prompt.content)
@@ -194,23 +194,23 @@ if prompt := st.chat_input(placeholder="최근 삼성전자 실적을 알려줘.
         # 챗봇으로부터의 응답을 처리하기 위한 Streamlit 컨테이너를 생성합니다.
         with st.chat_message("assistant"):
                 
-            # 최종 답변 생성
-						answer_prompt = f"""
-						사용자 질문: {prompt}
-						
-						관련 뉴스 정보:
-						{combined_docs}
-						
-						지시사항:
-						1. 위 정보를 바탕으로 사용자 질문에 대한 답변을 구체적으로 작성하세요.
-						2. 답변은 핵심 내용을 먼저 제시하는 두괄식으로 작성하세요.
-						3. 정보가 부족하면 "관련 정보가 충분하지 않습니다"라고 답하세요.
-						4. '오늘', '어제' 등의 상대적 날짜는 구체적인 날짜로 변환하세요.
-						5. 각 문장 끝에 출처를 [1], [2] 형식으로 표시하세요. 여러 출처는 [3][4] 형식으로 표시하세요.
-						6. 답변은 간결하고 명확하게, 3-4문장 이내로 작성하세요.
-						
-						답변:
-						"""
+            	# 최종 답변 생성
+		answer_prompt = f"""
+		사용자 질문: {prompt}
+	
+		관련 뉴스 정보:
+		{combined_docs}
+		
+		지시사항:
+		1. 위 정보를 바탕으로 사용자 질문에 대한 답변을 구체적으로 작성하세요.
+		2. 답변은 핵심 내용을 먼저 제시하는 두괄식으로 작성하세요.
+		3. 정보가 부족하면 "관련 정보가 충분하지 않습니다"라고 답하세요.
+		4. '오늘', '어제' 등의 상대적 날짜는 구체적인 날짜로 변환하세요.
+		5. 각 문장 끝에 출처를 [1], [2] 형식으로 표시하세요. 여러 출처는 [3][4] 형식으로 표시하세요.
+		6. 답변은 간결하고 명확하게, 3-4문장 이내로 작성하세요.
+		
+		답변:
+		"""
 
             client = anthropic.Anthropic(api_key=anthropic_api_key)
 
